@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Le P’tiot Sampantais</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f0e8;
+      color: #222;
+    }
+
+    header {
+      padding: 20px;
+      text-align: center;
+      background: #1f1f1f;
+      color: white;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    header p {
+      margin: 8px 0 0;
+      color: #ddd;
+    }
+
+    .controls {
+      padding: 15px;
+      text-align: center;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    select, button {
+      font-size: 16px;
+      padding: 8px 12px;
+      margin: 5px;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+    }
+
+    button {
+      cursor: pointer;
+      background: #222;
+      color: white;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 20px;
+      padding: 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+
+    .newspaper-wrap {
+      position: relative;
+      background: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .newspaper-wrap img {
+      width: 100%;
+      display: block;
+    }
+
+    .article-zone {
+      position: absolute;
+      border: 3px solid rgba(255, 180, 0, 0.85);
+      background: rgba(255, 220, 0, 0.18);
+      cursor: pointer;
+      box-sizing: border-box;
+    }
+
+    .article-zone:hover {
+      background: rgba(255, 220, 0, 0.35);
+    }
+
+    .article-zone.active {
+      border-color: red;
+      background: rgba(255, 0, 0, 0.18);
+    }
+
+    aside {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      height: fit-content;
+    }
+
+    aside h2 {
+      margin-top: 0;
+    }
+
+    #status {
+      color: #555;
+      font-style: italic;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Le P’tiot Sampantais</h1>
+    <p>Journal interactif — cliquez sur un article pour l’écouter</p>
+  </header>
+
+  <div class="controls">
+    <label for="language">Langue :</label>
+    <select id="language">
+      <option value="fr">Français</option>
+      <option value="en">English</option>
+      <option value="de">Deutsch</option>
+      <option value="it">Italiano</option>
+      <option value="es">Español</option>
+    </select>
+
+    <button onclick="previousPage()">Page précédente</button>
+    <span id="pageLabel">Page 1 / 12</span>
+    <button onclick="nextPage()">Page suivante</button>
+  </div>
+
+  <main>
+    <section class="newspaper-wrap" id="newspaper">
+      <img id="pageImage" src="pages/page-01.png" alt="Page 1 du journal Le P’tiot Sampantais">
+
+      <button
+        class="article-zone"
+        style="left: 2.8%; top: 16.1%; width: 17.5%; height: 28.8%;"
+        onclick="selectArticle('gouvernement-combes', 'Le gouvernement Combes et les congrégations religieuses')"
+        title="Le gouvernement Combes et les congrégations religieuses">
+      </button>
+
+      <button
+        class="article-zone"
+        style="left: 21.2%; top: 16.2%; width: 56.2%; height: 39.2%;"
+        onclick="selectArticle('debats-congregations-question-scolaire', 'Les débats sur les congrégations religieuses et la question scolaire')"
+        title="Les débats sur les congrégations religieuses et la question scolaire">
+      </button>
+
+      <button
+        class="article-zone"
+        style="left: 78.6%; top: 17.3%; width: 18.6%; height: 26.7%;"
+        onclick="selectArticle('message-loubet', 'Message du président Émile Loubet aux Français')"
+        title="Message du président Émile Loubet aux Français">
+      </button>
+
+      <button
+        class="article-zone"
+        style="left: 78.5%; top: 48.7%; width: 18.8%; height: 43.8%;"
+        onclick="selectArticle('telegrammes', 'Télégrammes')"
+        title="Télégrammes">
+      </button>
+
+      <button
+        class="article-zone"
+        style="left: 2.9%; top: 58.0%; width: 73.8%; height: 37.7%;"
+        onclick="selectArticle('greve-bassin-minier', 'La grève continue dans le bassin minier du Pas-de-Calais')"
+        title="La grève continue dans le bassin minier du Pas-de-Calais">
+      </button>
+
+      <button
+        class="article-zone"
+        style="left: 59.8%; top: 45.2%; width: 17.5%; height: 10.0%;"
+        onclick="selectArticle('auberge-jourdain-pontalier', 'L’Auberge Jourdain-Pontalier')"
+        title="L’Auberge Jourdain-Pontalier">
+      </button>
+
+      <button
+        class="article-zone"
+        style="left: 53.6%; top: 83.6%; width: 24.0%; height: 11.0%;"
+        onclick="selectArticle('laiterie-charles-gremaud', 'La Laiterie Charles Gremaud')"
+        title="La Laiterie Charles Gremaud">
+      </button>
+    </section>
+
+    <aside>
+      <h2 id="articleTitle">Choisissez un article</h2>
+      <p id="status">Cliquez sur une zone jaune de la page.</p>
+
+      <audio id="audioPlayer" controls>
+        Votre navigateur ne peut pas lire l’audio.
+      </audio>
+    </aside>
+  </main>
+
+  <script>
+    let currentPage = 1;
+
+    function pageNumber(n) {
+      return String(n).padStart(2, "0");
+    }
+
+    function selectArticle(articleId, title) {
+      const language = document.getElementById("language").value;
+      const audioPlayer = document.getElementById("audioPlayer");
+
+      document.getElementById("articleTitle").textContent = title;
+
+      const audioPath = `audio/page-${pageNumber(currentPage)}/${articleId}-${language}.mp3`;
+
+      audioPlayer.src = audioPath;
+      audioPlayer.play();
+
+      document.getElementById("status").textContent =
+        `Lecture : ${title} (${language})`;
+
+      document.querySelectorAll(".article-zone").forEach(zone => {
+        zone.classList.remove("active");
+      });
+
+      event.target.classList.add("active");
+    }
+
+    function updatePage() {
+      document.getElementById("pageImage").src =
+        `pages/page-${pageNumber(currentPage)}.png`;
+
+      document.getElementById("pageImage").alt =
+        `Page ${currentPage} du journal Le P’tiot Sampantais`;
+
+      document.getElementById("pageLabel").textContent =
+        `Page ${currentPage} / 12`;
+
+      document.getElementById("articleTitle").textContent =
+        "Choisissez un article";
+
+      document.getElementById("status").textContent =
+        "Cliquez sur une zone jaune de la page.";
+
+      document.getElementById("audioPlayer").pause();
+      document.getElementById("audioPlayer").removeAttribute("src");
+
+      document.querySelectorAll(".article-zone").forEach(zone => {
+        zone.classList.remove("active");
+      });
+    }
+
+    function nextPage() {
+      if (currentPage < 12) {
+        currentPage++;
+        updatePage();
+      }
+    }
+
+    function previousPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        updatePage();
+      }
+    }
+  </script>
+</body>
+</html>
